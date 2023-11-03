@@ -47,3 +47,31 @@ NODATA_value  -9999.000
 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190    
 ```
 
+For reading we can use this simple Python code:  
+   
+
+We open the file:
+```python
+with open('M5221.asc', 'r') as file:
+    lines = file.readlines()
+```
+Now we ask the user how many columns and rows they want to read:
+```python
+ncols = int(input("How many columns do you want to read?"))
+nrows = int(input("How many rows do you want to read?"))
+```
+We take the constraints provided in the .asc file for representing the data in Blender:
+```python
+xllcorner = float(lines[2].split()[1])
+yllcorner = float(lines[3].split()[1])
+cellsize = float(lines[4].split()[1])
+nodata_value = float(lines[5].split()[1])
+```
+Now we read the rows and columns the user wanted to read:
+```python
+height_data = []
+for line in lines[6:6+nrows]:
+    height_data.extend([float(value) for value in line.split()[:ncols]])
+```
+
+
