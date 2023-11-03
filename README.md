@@ -57,8 +57,8 @@ with open('M5221.asc', 'r') as file:
 ```
 Now we ask the user how many columns and rows they want to read:
 ```python
-ncols = int(input("How many columns do you want to read?"))
-nrows = int(input("How many rows do you want to read?"))
+ncols = int(input("How many columns do you want to read? "))
+nrows = int(input("How many rows do you want to read? "))
 ```
 We take the constraints provided in the .asc file for representing the data in Blender:
 ```python
@@ -73,5 +73,6 @@ height_data = []
 for line in lines[6:6+nrows]:
     height_data.extend([float(value) for value in line.split()[:ncols]])
 ```
+At the end of the *for loop* we have the variable *height_data* with all the coordinates.
 
 
