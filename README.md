@@ -46,8 +46,11 @@ NODATA_value  -9999.000
 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190  
 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190    
 ```
+We have three approaches:
 
-For reading we can use this simple Python code:  
+## Option 1:
+>Create a python script for Blender that reads the map height data from the file ***M5221.asc*** and creates a simple height visualization of a part of the information.
+#### For reading we can use this simple Python code:  
    
 
 We open the file:
@@ -75,4 +78,45 @@ for line in lines[6:6+nrows]:
 ```
 At the end of the *for loop* we have the variable *height_data* with all the coordinates.
 
+#### Now for the representation in Blender we can use this code:
+  
+Import the Blender library in python:
+```python
+import bpy
+```
+We create a new mesh object and we link it to the Blender' scene:
+```python
+mesh = bpy.data.meshes.new(name="HeightMapMesh")
+obj = bpy.data.objects.new(name="HeightMapObject", object_data=mesh)
+bpy.context.collection.objects.link(obj)
+bpy.context.view_layer.objects.active = obj
+obj.select_set(True)
+```
+Now we create vertices and faces based on *ncols* and *nrows*
+```python
+vertices = [(x, y, z) for y in range(nrows) for x in range(ncols) for z in [height_data[y * ncols + x]]]
+faces = [(i, i+1, i+ncols+1, i+ncols) for i in range(0, len(vertices)-ncols-1, ncols)]
+```
+And we create a mesh from them:
+```python
+mesh.from_pydata(vertices, [], faces)
+mesh.update()
+```
+Optionally we can adjust scale and position:
+```python
+obj.scale = (cellsize, cellsize, cellsize) 
+obj.location = (xllcorner, yllcorner, 0)   
+```
+And we can save the Blender file:
+```python
+bpy.ops.wm.save_as_mainfile(filepath="path_to_save.blend")
+```
 
+## Option 2:
+>Create a more advanced version of the blender script. Whole area covered in the file cannot be rendered by planes in a way that I have done in the first exercise example. Figure out how to render a larger area. Blender can manage a huge amount of vertexes. This 3d object in next screenshot for example contains 1 002 001 vertexes.
+
+>Add also a menu component that can be used to define the rendered area. User can for example define north/west and south/east coordinates. 
+
+
+## Option 3:
+>Create a script that renders height profile from one coordinate to another. There needs to be a menu where the coordinates are inserted. Addition to the profile, there also need to be start coordinates and height, end coordinates and height, highest coordinates and height, lowest coordinates and height in the image. 
