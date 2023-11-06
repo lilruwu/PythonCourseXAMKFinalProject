@@ -55,7 +55,7 @@ We have three approaches:
 
 We open the file:
 ```python
-with open('M5221.asc', 'r') as file:
+with open('PATH\\M5221.asc', 'r') as file:
     lines = file.readlines()
 ```
 Now we take the columns and rows we want changing them in the script (let's use 30 as example):
@@ -84,6 +84,10 @@ Import the Blender library in python:
 ```python
 import bpy
 ```
+We adjust the minimum height at the minimum height in the data set for improve the representation:
+```python
+min_height = min(height_data)
+```
 We create a new mesh object and we link it to the Blender' scene:
 ```python
 mesh = bpy.data.meshes.new(name="HeightMapMesh")
@@ -92,25 +96,75 @@ bpy.context.collection.objects.link(obj)
 bpy.context.view_layer.objects.active = obj
 obj.select_set(True)
 ```
-Now we create vertices and faces based on *ncols* and *nrows*
+Now we adjust the *voxels* size:
 ```python
-vertices = [(x, y, z) for y in range(nrows) for x in range(ncols) for z in [height_data[y * ncols + x]]]
-faces = [(i, i+1, i+ncols+1, i+ncols) for i in range(0, len(vertices)-ncols-1, ncols)]
+voxel_size = cellsize
 ```
-And we create a mesh from them:
+And we create the map using two *for* loops:
 ```python
-mesh.from_pydata(vertices, [], faces)
-mesh.update()
+for y in range(nrows):
+    for x in range(ncols):
+        z = height_data[y * ncols + x] - min_height # We use this formula for improve the map representation.
+        
+        bpy.ops.mesh.primitive_cube_add(size=voxel_size, enter_editmode=False, location=(x * voxel_size, y * voxel_size, z))
+        cubo = bpy.context.object
+        cubo.scale[2] = z
 ```
-Optionally we can adjust scale and position:
+We delete the original object of the mesh:
 ```python
-obj.scale = (cellsize, cellsize, cellsize) 
-obj.location = (xllcorner, yllcorner, 0)   
+bpy.data.objects.remove(obj)
 ```
-And we can save the Blender file:
+And we can save the Blender file if we want:
 ```python
 bpy.ops.wm.save_as_mainfile(filepath="path_to_save.blend")
 ```
+
+### This is the complete code and result:
+
+#### Code
+```python
+import bpy
+
+with open('PATH\\M5221.asc', 'r') as file:
+    lines = file.readlines()
+
+ncols = 30
+nrows = 30
+xllcorner = float(lines[2].split()[1])
+yllcorner = float(lines[3].split()[1])
+cellsize = float(lines[4].split()[1])
+nodata_value = float(lines[5].split()[1])
+
+height_data = []
+for line in lines[6:6+nrows]:
+    height_data.extend([float(value) for value in line.split()[:ncols]])
+
+min_height = min(height_data)
+
+mesh = bpy.data.meshes.new(name="HeightMapMesh")
+obj = bpy.data.objects.new(name="HeightMapObject", object_data=mesh)
+bpy.context.collection.objects.link(obj)
+bpy.context.view_layer.objects.active = obj
+obj.select_set(True)
+
+voxel_size = cellsize
+
+for y in range(nrows):
+    for x in range(ncols):
+        z = height_data[y * ncols + x] - min_height
+        
+        bpy.ops.mesh.primitive_cube_add(size=voxel_size, enter_editmode=False, location=(x * voxel_size, y * voxel_size, z))
+        cubo = bpy.context.object
+        cubo.scale[2] = z
+
+bpy.data.objects.remove(obj)
+
+# Uncomment to save the file
+#bpy.ops.wm.save_as_mainfile(filepath="path_to_save.blend")
+```
+
+#### Result
+![Image could not be loaded](./Option1Result.png)
 
 ## Option 2:
 >Create a more advanced version of the blender script. Whole area covered in the file cannot be rendered by planes in a way that I have done in the first exercise example. Figure out how to render a larger area. Blender can manage a huge amount of vertexes. This 3d object in next screenshot for example contains 1 002 001 vertexes.
