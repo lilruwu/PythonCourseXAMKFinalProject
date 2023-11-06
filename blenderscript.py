@@ -3,8 +3,8 @@ import bpy
 with open('M5221.asc', 'r') as file:
     lines = file.readlines()
 
-ncols = int(input("How many columns do you want to read? "))
-nrows = int(input("How many rows do you want to read? "))
+ncols = 30
+nrows = 30
 xllcorner = float(lines[2].split()[1])
 yllcorner = float(lines[3].split()[1])
 cellsize = float(lines[4].split()[1])

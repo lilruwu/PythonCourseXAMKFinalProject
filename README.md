@@ -58,10 +58,10 @@ We open the file:
 with open('M5221.asc', 'r') as file:
     lines = file.readlines()
 ```
-Now we ask the user how many columns and rows they want to read:
+Now we take the columns and rows we want changing them in the script (let's use 30 as example):
 ```python
-ncols = int(input("How many columns do you want to read? "))
-nrows = int(input("How many rows do you want to read? "))
+ncols = 30 # Can be change
+nrows = 30 # Can be change
 ```
 We take the constraints provided in the .asc file for representing the data in Blender:
 ```python
