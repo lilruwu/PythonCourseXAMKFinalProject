@@ -205,30 +205,30 @@ Import the Blender library in python:
 ```python
 import bpy
 ```
-This code creates a new mesh and object in Blender
+We create a new mesh and object in Blender:
 ```python
 mesh = bpy.data.meshes.new(name="HeightMapMesh")
 obj = bpy.data.objects.new(name="HeightMapObject", object_data=mesh)
 ```
-links the object to the current collection
+We link the object to the current collection:
 ```python
 bpy.context.collection.objects.link(obj)
 ```
- sets it as the active object  and selects it.
+We set it as the active object and we select it:
 ```python
 bpy.context.view_layer.objects.active = obj
 obj.select_set(True)
 ```
-Scale the object in the z axis
+We scale the object in the z axis for improve the map view:
 ```python
 obj.scale = (1, 1, 5)
 ```
-This code generates vertices and faces for a 3D mesh from height data.This code generates vertices and faces for a 3D mesh from height data.
+We generatee vertices and faces for a 3D mesh from height data:
 ```python
 vertices = [(x * cellsize, y * cellsize, z - min(height_data)) for y in range(nrows) for x in range(ncols) for z in [height_data[y * ncols + x]]]
 faces = [(i, i+1, i+ncols+2, i+ncols+1) for i in range(0, len(vertices)-ncols-1) if (i+1) % ncols != 0]
 ```
-This code creates a mesh object from a set of vertices and faces and updates it
+We createe a mesh object from a set of vertices and faces and we update it:
 ```python
 mesh.from_pydata(vertices, [], faces)
 mesh.update()
