@@ -171,6 +171,67 @@ bpy.data.objects.remove(obj)
 
 >Add also a menu component that can be used to define the rendered area. User can for example define north/west and south/east coordinates. 
 
+#### For reading we can use this simple Python code:  
+   
 
+We open the file:
+```python
+with open('PATH\\M5221.asc', 'r') as file:
+    lines = file.readlines()
+```
+Now we take the columns and rows we want changing them in the script (let's use 30 as example):
+```python
+ncols = 30 # Can be change
+nrows = 30 # Can be change
+```
+We take the constraints provided in the .asc file for representing the data in Blender:
+```python
+xllcorner = float(lines[2].split()[1])
+yllcorner = float(lines[3].split()[1])
+cellsize = float(lines[4].split()[1])
+nodata_value = float(lines[5].split()[1])
+```
+Now we read the rows and columns the user wanted to read:
+```python
+height_data = []
+for line in lines[6:6+nrows]:
+    height_data.extend([float(value) for value in line.split()[:ncols]])
+```
+At the end of the *for loop* we have the variable *height_data* with all the coordinates.
+
+#### Now for the representation in Blender we can use this code:
+  
+Import the Blender library in python:
+```python
+import bpy
+```
+This code creates a new mesh and object in Blender
+```python
+mesh = bpy.data.meshes.new(name="HeightMapMesh")
+obj = bpy.data.objects.new(name="HeightMapObject", object_data=mesh)
+```
+links the object to the current collection
+```python
+bpy.context.collection.objects.link(obj)
+```
+ sets it as the active object  and selects it.
+```python
+bpy.context.view_layer.objects.active = obj
+obj.select_set(True)
+```
+Scale the object in the z axis
+```python
+obj.scale = (1, 1, 5)
+```
+This code generates vertices and faces for a 3D mesh from height data.This code generates vertices and faces for a 3D mesh from height data.
+```python
+vertices = [(x * cellsize, y * cellsize, z - min(height_data)) for y in range(nrows) for x in range(ncols) for z in [height_data[y * ncols + x]]]
+faces = [(i, i+1, i+ncols+2, i+ncols+1) for i in range(0, len(vertices)-ncols-1) if (i+1) % ncols != 0]
+```
+This code creates a mesh object from a set of vertices and faces and updates it
+```python
+mesh.from_pydata(vertices, [], faces)
+mesh.update()
+```
 ## Option 3:
 >Create a script that renders height profile from one coordinate to another. There needs to be a menu where the coordinates are inserted. Addition to the profile, there also need to be start coordinates and height, end coordinates and height, highest coordinates and height, lowest coordinates and height in the image. 
