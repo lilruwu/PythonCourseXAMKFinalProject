@@ -1,6 +1,6 @@
 import bpy
 
-with open('C:\\Users\\fruca001\\projectPython\\PythonCourseXAMKFinalProject\\M5221.asc', 'r') as file:
+with open('PATH\\M5221.asc', 'r') as file:
     lines = file.readlines()
 
 ncols = 30

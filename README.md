@@ -22,8 +22,8 @@
 
 ## Tools that I am going to use:
 
- - Blender 3.6
- - Python 3.10.12
+ - [Blender 3.6](https://docs.blender.org/api/current/)
+ - [Python 3.10.12](https://docs.python.org/release/3.10.12/)
  - Visual Studio Code
  - Git
  - GitHub
