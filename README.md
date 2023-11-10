@@ -46,7 +46,7 @@ NODATA_value  -9999.000
 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190  
 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190 114.190    
 ```
-We have three approaches:
+We are going to do two different approaches:
 
 ## Option 1:
 >Create a python script for Blender that reads the map height data from the file ***M5221.asc*** and creates a simple height visualization of a part of the information.
@@ -233,5 +233,3 @@ We createe a mesh object from a set of vertices and faces and we update it:
 mesh.from_pydata(vertices, [], faces)
 mesh.update()
 ```
-## Option 3:
->Create a script that renders height profile from one coordinate to another. There needs to be a menu where the coordinates are inserted. Addition to the profile, there also need to be start coordinates and height, end coordinates and height, highest coordinates and height, lowest coordinates and height in the image. 
