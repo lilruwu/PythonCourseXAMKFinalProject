@@ -22,7 +22,7 @@ obj.select_set(True)
 obj.scale = (1, 1, 5)
 
 vertices = [(x * cellsize, y * cellsize, z - min(height_data)) for y in range(nrows) for x in range(ncols) for z in [height_data[y * ncols + x]]]
-faces = [(i, i+1, i+ncols+2, i+ncols+1) for i in range(0, len(vertices)-ncols-1) if (i+1) % ncols != 0]
+faces = [(i, i+1, i+ncols+1, i+ncols) for i in range(0, len(vertices)-ncols-1) if (i+1) % ncols != 0]
 
 mesh.from_pydata(vertices, [], faces)
 mesh.update()
