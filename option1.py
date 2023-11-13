@@ -23,8 +23,8 @@ for y in range(nrows):
         z = height_data[y * ncols + x] - min_height
         
         bpy.ops.mesh.primitive_cube_add(size=voxel_size, enter_editmode=False, location=(x * voxel_size, y * voxel_size, z))
-        cubo = bpy.context.object
-        cubo.scale[2] = z
+        cube = bpy.context.object
+        cube.scale[2] = z
 
 # Uncomment to save the file
 #bpy.ops.wm.save_as_mainfile(filepath="path_to_save.blend")

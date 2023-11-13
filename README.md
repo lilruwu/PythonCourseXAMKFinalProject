@@ -99,8 +99,8 @@ for y in range(nrows):
         z = height_data[y * ncols + x] - min_height # We use this formula for improve the map representation.
         
         bpy.ops.mesh.primitive_cube_add(size=voxel_size, enter_editmode=False, location=(x * voxel_size, y * voxel_size, z))
-        cubo = bpy.context.object
-        cubo.scale[2] = z
+        cube = bpy.context.object
+        cube.scale[2] = z
 ```
 And we can save the Blender file if we want:
 ```python
@@ -136,8 +136,8 @@ for y in range(nrows):
         z = height_data[y * ncols + x] - min_height
         
         bpy.ops.mesh.primitive_cube_add(size=voxel_size, enter_editmode=False, location=(x * voxel_size, y * voxel_size, z))
-        cubo = bpy.context.object
-        cubo.scale[2] = z
+        cube = bpy.context.object
+        cube.scale[2] = z
 
 # Uncomment to save the file
 #bpy.ops.wm.save_as_mainfile(filepath="path_to_save.blend")
@@ -206,7 +206,7 @@ obj.scale = (1, 1, 5)
 We generatee vertices and faces for a 3D mesh from height data:
 ```python
 vertices = [(x * cellsize, y * cellsize, z - min(height_data)) for y in range(nrows) for x in range(ncols) for z in [height_data[y * ncols + x]]]
-faces = [(i, i+1, i+ncols+2, i+ncols+1) for i in range(0, len(vertices)-ncols-1) if (i+1) % ncols != 0]
+faces = [(i, i+1, i+ncols+1, i+ncols) for i in range(0, len(vertices)-ncols-1) if (i+1) % ncols != 0]
 ```
 We createe a mesh object from a set of vertices and faces and we update it:
 ```python
