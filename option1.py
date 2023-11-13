@@ -16,8 +16,8 @@ for line in lines[6:6+nrows]:
 
 min_height = min(height_data)
 
-mesh = bpy.data.meshes.new(name="HeightMapMesh")
-obj = bpy.data.objects.new(name="HeightMapObject", object_data=mesh)
+mesh = bpy.data.meshes.new(name="3DMapMesh")
+obj = bpy.data.objects.new(name="3DMapObject", object_data=mesh)
 bpy.context.collection.objects.link(obj)
 bpy.context.view_layer.objects.active = obj
 obj.select_set(True)
