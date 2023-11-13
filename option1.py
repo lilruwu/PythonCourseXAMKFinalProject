@@ -16,12 +16,6 @@ for line in lines[6:6+nrows]:
 
 min_height = min(height_data)
 
-mesh = bpy.data.meshes.new(name="3DMapMesh")
-obj = bpy.data.objects.new(name="3DMapObject", object_data=mesh)
-bpy.context.collection.objects.link(obj)
-bpy.context.view_layer.objects.active = obj
-obj.select_set(True)
-
 voxel_size = cellsize
 
 for y in range(nrows):
@@ -31,8 +25,6 @@ for y in range(nrows):
         bpy.ops.mesh.primitive_cube_add(size=voxel_size, enter_editmode=False, location=(x * voxel_size, y * voxel_size, z))
         cubo = bpy.context.object
         cubo.scale[2] = z
-
-bpy.data.objects.remove(obj)
 
 # Uncomment to save the file
 #bpy.ops.wm.save_as_mainfile(filepath="path_to_save.blend")
