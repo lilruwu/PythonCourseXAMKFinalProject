@@ -382,3 +382,13 @@ if __name__ == "__main__":
 #### Result
 ![Image could not be loaded](./Option2/Option2Result1.png)
 ![Image could not be loaded](./Option2/Option2Result2.png)
+
+## Conclusion
+In this final project for the Python course in Blender, we've explored two approaches to represent Finland's height data in a three-dimensional environment using Blender and Python.
+
+***Option 1*** offers a straightforward representation using cubes that visualize a section of the height data, providing an initial understanding of how the data can be mapped into a three-dimensional space.
+
+On the other hand, ***Option 2*** expands the possibilities by presenting a more advanced solution. Apart from generating the three-dimensional representation of the data, it implements an interactive menu in Blender to define the area to be represented, offering a more flexible and adaptable experience.
+
+By following the detailed steps outlined in this document, an effective representation of Finland's height data in Blender can be achieved, providing a solid foundation for development and understanding of data visualization in three-dimensional environments.
+
