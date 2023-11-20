@@ -151,6 +151,10 @@ for y in range(nrows):
 
 >Add also a menu component that can be used to define the rendered area. User can for example define north/west and south/east coordinates. 
 
+#### Note
+> I am going to do it using a simple method (related to coding) and using BMesh (which is a more efficient approach for computer who has no graphic card)
+
+
 #### For reading we can use this simple Python code:  
    
 
@@ -179,7 +183,8 @@ for line in lines[6:6+nrows]:
 ```
 At the end of the *for loop* we have the variable *height_data* with all the coordinates.
 
-#### Now for the representation in Blender we can use this code:
+#### Now for the representation in Blender we can use this code: 
+##### Simple Approach
   
 Import the Blender library in python:
 ```python
@@ -213,7 +218,63 @@ We create a mesh object from a set of vertices and faces and we update it:
 mesh.from_pydata(vertices, [], faces)
 mesh.update()
 ```
-With this the map is created but now we need to add a menu.
+
+##### BMesh Approach
+Import the Blender and BMesh libraries:
+```python
+import bpy
+import bmesh
+```
+We generate a mesh by creating BMesh vertices and faces based on the provided *height_data* and mesh dimensions:
+```python
+bm = bmesh.new()
+
+vertices = [(x * cellsize, y * cellsize, z - min(height_data)) for y in range(nrows) for x in range(ncols) for z in
+            [height_data[y * ncols + x]]]
+
+bm_verts = [bm.verts.new(v) for v in vertices]
+bm.verts.ensure_lookup_table()
+
+faces = [(i, i + 1, i + ncols + 1, i + ncols) for i in range(0, len(vertices) - ncols - 1) if (i + 1) % ncols != 0]
+
+for f in faces:
+    bm.faces.new([bm_verts[i] for i in f])
+```
+We create a mesh called *3DMapMesh*:
+```python
+mesh = bpy.data.meshes.new("3DMapMesh")
+```
+We write the bmesh into the mesh and free the bmesh:
+```python
+bm.to_mesh(mesh)
+bm.free()
+```
+We create an object in Blender:
+```python
+obj = bpy.data.objects.new(name="3DMapObject", object_data=mesh)
+```
+We link the object to the current collection:
+```python
+bpy.context.collection.objects.link(obj)
+```
+We set it as the active object and we select it:
+```python
+bpy.context.view_layer.objects.active = obj
+obj.select_set(True)
+```
+We can scale the object in the z axis for improve the map view:
+```python
+obj.scale = (1, 1, 1) # Change the numbers for scale the map (x,y,z)
+```
+And we update the mesh:
+```python
+mesh.update()
+```
+
+
+
+
+**With both approaches the map is created but now we need to add a menu.**
 
 #### Now for the menu:
 
